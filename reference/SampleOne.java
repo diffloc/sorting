@@ -1,6 +1,6 @@
 
 
-package sorting;
+package sorting.reference;
 
 // Example showing Strategy Pattern and Interfaces
 //

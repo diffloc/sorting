@@ -1,4 +1,4 @@
-package sorting;
+package sorting.reference;
 
 // More organized approach
 //
