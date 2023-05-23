@@ -4,6 +4,12 @@ public class CommandLineParser {
     public static String parseDataTypeArgument(String[] args) {
         // Implementation to parse the dataType argument from args
         // Return the dataType value or throw an exception if not found or not valid
+        for (String arg: args) {
+            if (arg.equals("-sortIntegers")) {
+                return "sortItOut";
+            }
+        }
+
         String dataType = "";
         if (args.length > 1 && args[0].equals("-dataType")) {
             dataType = args[1];

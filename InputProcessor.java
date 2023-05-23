@@ -8,7 +8,7 @@ public class InputProcessor {
     public static void processInput(InputParts<Object> inputParts, OutputParts<Object> outputParts, String dataType) {
         List<Object> parts = inputParts.getParts();
         switch (dataType) {
-            case "long" -> {
+            case "long", "sortItOut" -> {
                 List<Long> longList = new ArrayList<>();
                 for (Object input : parts) {
                     if (input instanceof String) {

@@ -8,6 +8,7 @@ public class OutputFormatter {
             case "long" -> displayLongOutput(outputParts);
             case "line" -> displayLineOutput(outputParts);
             case "word" -> displayWordOutput(outputParts);
+            case "sortItOut" -> displaySortIntegersOutput(outputParts);
             default -> displayDefaultOutput(outputParts, dataType);
         }
     }
@@ -69,6 +70,23 @@ public class OutputFormatter {
         int percentage = (int) Math.round((double) count / wordList.size() * 100);
         System.out.printf("Total words: %d.\n", wordList.size());
         System.out.printf("The longest word: %s (%d time(s), %d%%).\n", longestWord, count, percentage);
+    }
+
+    private static void displaySortIntegersOutput(OutputParts<Object> outputParts) {
+        List<Long> longList = new ArrayList<>();
+        for (Object input : outputParts.getParts()) {
+            if (input instanceof Long) {
+                longList.add((Long) input);
+            }
+        }
+
+        Collections.sort(longList);
+
+        System.out.printf("Total numbers: %d.\n", longList.size());
+        System.out.print("Sorted data: ");
+        for (Long number : longList) {
+            System.out.print(number + " ");
+        }
     }
 
     private static void displayDefaultOutput(OutputParts<Object> outputParts, String dataType) {
