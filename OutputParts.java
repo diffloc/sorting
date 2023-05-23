@@ -2,11 +2,11 @@ package sorting;
 
 import java.util.List;
 
-public class InputParts<T> {
+public class OutputParts<T> {
 
     private final List<T> parts;
 
-    public InputParts(List<T> parts) {
+    public OutputParts(List<T> parts) {
         this.parts = parts;
     }
 
