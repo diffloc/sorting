@@ -1,9 +1,10 @@
 package sorting;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CommandLineParser {
     public static String parseDataTypeArgument(String[] args) {
-        // Implementation to parse the dataType argument from args
-        // Return the dataType value or throw an exception if not found or not valid
         for (String arg: args) {
             if (arg.equals("-sortIntegers")) {
                 return "sortItOut";
@@ -19,5 +20,20 @@ public class CommandLineParser {
             throw new IllegalArgumentException("Data type argument \"" + dataType + "\" not found or not valid.");
         }
         return dataType;
+    }
+
+    public static Map<String, String> parseArguments(String[] args) {
+        Map<String, String> arguments = new HashMap<>();
+        for (int i = 0; i < args.length - 1; i++) {
+            String arg = args[i];
+            if (arg.startsWith("-")) {
+                if (args.length > i + 1 && !args[i + 1].startsWith("-")) {
+                    arguments.put(arg.substring(1), args[i + 1]);
+                } else {
+                    arguments.put(arg.substring(1), "");
+                }
+            }
+        }
+        return arguments;
     }
 }

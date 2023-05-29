@@ -1,107 +1,172 @@
 package sorting;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OutputFormatter {
-    public static void displayOutput(OutputParts<Object> outputParts, String dataType) {
-        switch (dataType) {
-            case "long" -> displayLongOutput(outputParts);
-            case "line" -> displayLineOutput(outputParts);
-            case "word" -> displayWordOutput(outputParts);
-            case "sortItOut" -> displaySortIntegersOutput(outputParts);
-            default -> displayDefaultOutput(outputParts, dataType);
+
+    private static String getDataTypeLabel(String dataType) {
+        return switch (dataType) {
+            case "long" -> "numbers";
+            case "line" -> "lines";
+            case "word" -> "words";
+            default -> "items";
+        };
+    }
+
+    public static void displayOutputLong(DataParts<Long> outputParts, String sortingType) {
+        switch (sortingType) {
+            case "natural" -> displayNaturalSortingOutputLong(outputParts, "long");
+            case "byCount" -> displayCountSortingOutputLong(outputParts, "long");
         }
     }
 
-    private static void displayLongOutput(OutputParts<Object> outputParts) {
-        List<Long> longList = new ArrayList<>();
-        for (Object input : outputParts.getParts()) {
-            if (input instanceof Long) {
-                longList.add((Long) input);
-            }
+    public static void displayOutputLine(DataParts<String> outputParts, String sortingType) {
+        switch (sortingType) {
+            case "natural" -> displayNaturalSortingOutputLine(outputParts, "line");
+            case "byCount" -> displayCountSortingOutputLine(outputParts, "line");
         }
-        long max = Collections.max(longList);
-        long count = Collections.frequency(longList, max);
-        int percentage = (int) Math.round((double) count / longList.size() * 100);
-
-        System.out.printf("Total numbers: %d.\n", longList.size());
-        System.out.printf("The greatest number: %d (%d time(s), %d%%).\n", max, count, percentage);
     }
 
-    private static void displayLineOutput(OutputParts<Object> outputParts) {
-        List<String> lineList = new ArrayList<>();
-        for (Object input : outputParts.getParts()) {
-            if (input instanceof String) {
-                lineList.addAll(Arrays.asList(((String) input).split("~")));
-            }
+    public static void displayOutputWord(DataParts<String> outputParts, String sortingType) {
+        switch (sortingType) {
+            case "natural" -> displayNaturalSortingOutputWord(outputParts, "word");
+            case "byCount" -> displayCountSortingOutputWord(outputParts, "word");
         }
-        int max = 0;
-        String longestLine = "";
-        for (String line : lineList) {
-            if (line.length() > max) {
-                max = line.length();
-                longestLine = line;
-            }
-        }
-        int count = Collections.frequency(lineList, longestLine);
-        int percentage = (int) Math.round((double) count / lineList.size() * 100);
-        System.out.printf("Total lines: %d.\n", lineList.size());
-        System.out.printf("The longest line:\n%s\n(%d time(s), %d%%).\n", longestLine, count, percentage);
     }
 
-    private static void displayWordOutput(OutputParts<Object> outputParts) {
-        List<String> wordList = new ArrayList<>();
-        for (Object input : outputParts.getParts()) {
-            if (input instanceof String) {
-                wordList.add((String) input);
-            }
-        }
+    private static void displayNaturalSortingOutputLong(DataParts<Long> outputParts, String dataType) {
+        List<Long> parts = outputParts.getParts();
+        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
 
-        int max = 0;
-        String longestWord = "";
-        for (String word : wordList)
-        {
-            if (word.length() > max) {
-                max = word.length();
-                longestWord = word;
-            }
-        }
-        int count = Collections.frequency(wordList, longestWord);
-        int percentage = (int) Math.round((double) count / wordList.size() * 100);
-        System.out.printf("Total words: %d.\n", wordList.size());
-        System.out.printf("The longest word: %s (%d time(s), %d%%).\n", longestWord, count, percentage);
-    }
-
-    private static void displaySortIntegersOutput(OutputParts<Object> outputParts) {
-        List<Long> longList = new ArrayList<>();
-        for (Object input : outputParts.getParts()) {
-            if (input instanceof Long) {
-                longList.add((Long) input);
-            }
-        }
-
+        List<Long> longList = parts.stream()
+                .filter(obj -> obj instanceof Long)
+                .map(obj -> (Long) obj)
+                .collect(Collectors.toList());
         Collections.sort(longList);
-
-        System.out.printf("Total numbers: %d.\n", longList.size());
         System.out.print("Sorted data: ");
         for (Long number : longList) {
             System.out.print(number + " ");
         }
     }
 
-    private static void displayDefaultOutput(OutputParts<Object> outputParts, String dataType) {
-        Map<Object, Integer> freqMap = new HashMap<>();
-        for (Object input : outputParts.getParts()) {
-            if (freqMap.containsKey(input)) {
-                freqMap.put(input, freqMap.get(input) + 1);
-            } else {
-                freqMap.put(input, 1);
-            }
+    private static void displayNaturalSortingOutputLine(DataParts<String> outputParts, String dataType) {
+        List<String> parts = outputParts.getParts();
+        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+
+        List<String> lineList = parts.stream()
+                .filter(obj -> obj instanceof String)
+                .map(obj -> (String) obj)
+                .collect(Collectors.toList());
+        Collections.sort(lineList);
+        System.out.println("Sorted data:");
+        for (String line : lineList) {
+            System.out.println(line);
         }
-        Object max = Collections.max(freqMap.entrySet(), Map.Entry.comparingByValue()).getKey();
-        int count = freqMap.get(max);
-        int percentage = (int) Math.round((double) count / outputParts.getParts().size() * 100);
-        System.out.printf("Total %s: %d.\n", outputParts.getParts().size() == 1 ? "item" : "items", outputParts.getParts().size());
-        System.out.printf("The greatest %s: %s (%d time(s), %d%%).\n", dataType, max.toString(), count, percentage);
+    }
+
+    private static void displayNaturalSortingOutputWord(DataParts<String> outputParts, String dataType) {
+        List<String> parts = outputParts.getParts();
+        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+
+        List<String> wordList = parts.stream()
+                .filter(obj -> obj instanceof String)
+                .map(obj -> (String) obj)
+                .collect(Collectors.toList());
+        Collections.sort(wordList);
+        System.out.print("Sorted data: ");
+        for (String word : wordList) {
+            System.out.print(word + " ");
+        }
+    }
+
+    private static void displayCountSortingOutputLong(DataParts<Long> outputParts, String dataType) {
+        List<Long> parts = outputParts.getParts();
+        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+
+        Map<Long, Integer> frequencyMap = new HashMap<>();
+        // Count the frequency of each element
+        for (Long element : parts) {
+            frequencyMap.put(element, frequencyMap.getOrDefault(element, 0) + 1);
+        }
+
+        // Sort the elements by count and then by natural order using a custom Comparator
+        List<Map.Entry<Long, Integer>> sortedEntries = new ArrayList<>(frequencyMap.entrySet());
+        sortedEntries.sort(new CountComparator<>());
+
+        // Calculate the total number of elements
+        int totalElements = parts.size();
+
+        // Display the sorted elements with count and percentage
+        for (Map.Entry<Long, Integer> entry : sortedEntries) {
+            Long element = entry.getKey();
+            int count = entry.getValue();
+            double percentage = (double) count / totalElements * 100;
+            System.out.printf("%d: %d time(s), %.0f%%\n", element, count, percentage);
+        }
+    }
+
+    private static void displayCountSortingOutputLine(DataParts<String> outputParts, String dataType) {
+        List<String> parts = outputParts.getParts();
+        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+
+        Map<String, Integer> frequencyMap = new HashMap<>();
+        // Count the frequency of each element
+        for (String element : parts) {
+            frequencyMap.put(element, frequencyMap.getOrDefault(element, 0) + 1);
+        }
+
+        // Sort the elements by count and then by natural order using a custom Comparator
+        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(frequencyMap.entrySet());
+        sortedEntries.sort(new CountComparator<>());
+
+        // Calculate the total number of elements
+        int totalElements = parts.size();
+
+        // Display the sorted elements with count and percentage
+        for (Map.Entry<String, Integer> entry : sortedEntries) {
+            String element = entry.getKey();
+            int count = entry.getValue();
+            double percentage = (double) count / totalElements * 100;
+            System.out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+        }
+    }
+
+    private static void displayCountSortingOutputWord(DataParts<String> outputParts, String dataType) {
+        List<String> parts = outputParts.getParts();
+        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+
+        Map<String, Integer> frequencyMap = new HashMap<>();
+        // Count the frequency of each element
+        for (String element : parts) {
+            frequencyMap.put(element, frequencyMap.getOrDefault(element, 0) + 1);
+        }
+
+        // Sort the elements by count and then by natural order using a custom Comparator
+        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(frequencyMap.entrySet());
+        sortedEntries.sort(new CountComparator<>());
+
+        // Calculate the total number of elements
+        int totalElements = parts.size();
+
+        // Display the sorted elements with count and percentage
+        for (Map.Entry<String, Integer> entry : sortedEntries) {
+            String element = entry.getKey();
+            int count = entry.getValue();
+            double percentage = (double) count / totalElements * 100;
+            System.out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+        }
+    }
+
+    private static class CountComparator<T extends Comparable<T>> implements Comparator<Map.Entry<T, Integer>> {
+        @Override
+        public int compare(Map.Entry<T, Integer> entry1, Map.Entry<T, Integer> entry2) {
+            int countComparison = entry1.getValue().compareTo(entry2.getValue());
+            if (countComparison != 0) {
+                return countComparison; // Sort by count in ascending order
+            }
+            return entry1.getKey().compareTo(entry2.getKey()); // Sort by key in natural order
+        }
     }
 }
+

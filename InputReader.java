@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InputReader {
-    public static InputParts<Object> readInput(String dataType) {
-        // Implementation to read input using a Scanner
-        // Return an InputParts object containing the parsed input
 
+    public static DataParts<String> readInput() {
         Scanner scanner = new Scanner(System.in);
-        InputParts<Object> inputParts = new InputParts<>(new ArrayList<>());
+        DataParts<String> inputParts = new DataParts<>(new ArrayList<>());
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
             if (input.isEmpty()) {

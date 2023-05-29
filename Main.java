@@ -4,20 +4,29 @@ import java.util.*;
 
 public class Main {
     public static void main(final String[] args) {
+        Map<String, String> arguments = CommandLineParser.parseArguments(args);
+        String dataType = arguments.getOrDefault("dataType", "");
+        String sortingType = arguments.getOrDefault("sortingType", "natural");
+        DataParts<String> inputParts = InputReader.readInput();
 
-        String dataType = null;
-        try {
-            dataType = CommandLineParser.parseDataTypeArgument(args);
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-            // TODO: Perform any additional cleanup or logging here if needed
-            System.exit(1); // Terminate the program with a non-zero status code
+        switch (dataType) {
+            case "long" -> {
+                DataParts<Long> outputParts = new DataParts<>(new ArrayList<>());
+                InputProcessor.processInputLong(inputParts, outputParts);
+                OutputFormatter.displayOutputLong(outputParts, sortingType);
+            }
+            case "line" -> {
+                DataParts<String> outputParts = new DataParts<>(new ArrayList<>());
+                InputProcessor.processInputLine(inputParts, outputParts);
+                OutputFormatter.displayOutputLine(outputParts, sortingType);
+            }
+            case "word" -> {
+                DataParts<String> outputParts = new DataParts<>(new ArrayList<>());
+                InputProcessor.processInputWord(inputParts, outputParts);
+                OutputFormatter.displayOutputWord(outputParts, sortingType);
+            }
+            default -> throw new IllegalArgumentException("Unsupported data type: " + dataType);
         }
-
-        InputParts<Object> inputParts = InputReader.readInput(dataType);
-        OutputParts<Object> outputParts = new OutputParts<>(new ArrayList<>());
-        InputProcessor.processInput(inputParts, outputParts, dataType);
-        OutputFormatter.displayOutput(outputParts, dataType);
     }
 }
+
