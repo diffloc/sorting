@@ -5,9 +5,19 @@ import java.util.*;
 public class Main {
     public static void main(final String[] args) {
         Map<String, String> arguments = CommandLineParser.parseArguments(args);
-        String dataType = arguments.getOrDefault("dataType", "");
-        String sortingType = arguments.getOrDefault("sortingType", "natural");
+        String dataType = arguments.getOrDefault("-dataType", "");
+        String sortingType = arguments.getOrDefault("-sortingType", "natural");
         DataParts<String> inputParts = InputReader.readInput();
+
+        if (dataType.isEmpty()) {
+            System.out.println("No data type defined!");
+            return;
+        }
+
+        if (sortingType.isEmpty()) {
+            System.out.println("No sorting type defined!");
+            return;
+        }
 
         switch (dataType) {
             case "long" -> {

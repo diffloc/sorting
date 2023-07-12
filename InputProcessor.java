@@ -7,7 +7,6 @@ import java.util.List;
 public class InputProcessor {
 
     public static void processInputLong(DataParts<String> inputParts, DataParts<Long> outputParts) {
-        List<Long> longList = new ArrayList<>();
         for (String line: inputParts.getParts()) {
             String[] numbers = line.split("\\s+");
             for (String token : numbers) {
@@ -15,7 +14,7 @@ public class InputProcessor {
                     long number = Long.parseLong(token);
                     outputParts.getParts().add(number);
                 } catch (NumberFormatException e) {
-                    System.out.println("Exception: " + e);
+                    System.out.println("\"" + token + "\" is not a long. It will be skipped.");
                 }
             }
         }
