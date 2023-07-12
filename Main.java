@@ -6,7 +6,7 @@ import java.util.*;
 public class Main {
     public static void main(final String[] args) throws IOException {
         Map<String, String> arguments = CommandLineParser.parseArguments(args);
-        String dataType = arguments.getOrDefault("-dataType", "");
+        String dataType = arguments.getOrDefault("-dataType", "line");
         String sortingType = arguments.getOrDefault("-sortingType", "natural");
         String inputFile = arguments.getOrDefault("-inputFile", null);
         String outputFile = arguments.getOrDefault("-outputFile", null);
