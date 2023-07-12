@@ -9,7 +9,7 @@ public class CommandLineParser {
 
     public static Map<String, String> parseArguments(String[] args) {
         Map<String, String> arguments = new HashMap<>();
-        List<String> knownArgs = Arrays.asList("-dataType", "-sortingType"); // Todo: ENUM
+        List<String> knownArgs = Arrays.asList("-dataType", "-sortingType", "-inputFile", "-outputFile"); // Todo: ENUM
 
         for (int i = 0; i < args.length; i++) {
             if (args[i].startsWith("-")) {

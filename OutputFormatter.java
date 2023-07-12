@@ -1,5 +1,9 @@
 package sorting;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,62 +18,86 @@ public class OutputFormatter {
         };
     }
 
-    // TODO: Refactoir with generic displayNatural and displayCount
+    // TODO: Refactor with generic displayNatural and displayCount
 
-    public static void displayOutputLong(DataParts<Long> outputParts, String sortingType) {
+    public static void displayOutputLong(DataParts<Long> outputParts, String sortingType, String outputFile) throws IOException {
         switch (sortingType) {
-            case "natural" -> displayNaturalSortingOutputLong(outputParts, "long");
-            case "byCount" -> displayCountSortingOutputLong(outputParts, "long");
+            case "natural" -> displayNaturalSortingOutputLong(outputParts, "long", outputFile);
+            case "byCount" -> displayCountSortingOutputLong(outputParts, "long", outputFile);
         }
     }
 
-    public static void displayOutputLine(DataParts<String> outputParts, String sortingType) {
+    public static void displayOutputLine(DataParts<String> outputParts, String sortingType, String outputFile) throws IOException {
         switch (sortingType) {
-            case "natural" -> displayNaturalSortingOutputLine(outputParts, "line");
-            case "byCount" -> displayCountSortingOutputLine(outputParts, "line");
+            case "natural" -> displayNaturalSortingOutputLine(outputParts, "line", outputFile);
+            case "byCount" -> displayCountSortingOutputLine(outputParts, "line", outputFile);
         }
     }
 
-    public static void displayOutputWord(DataParts<String> outputParts, String sortingType) {
+    public static void displayOutputWord(DataParts<String> outputParts, String sortingType, String outputFile) throws IOException {
         switch (sortingType) {
-            case "natural" -> displayNaturalSortingOutputWord(outputParts, "word");
-            case "byCount" -> displayCountSortingOutputWord(outputParts, "word");
+            case "natural" -> displayNaturalSortingOutputWord(outputParts, "word", outputFile);
+            case "byCount" -> displayCountSortingOutputWord(outputParts, "word", outputFile);
         }
     }
 
-    private static void displayNaturalSortingOutputLong(DataParts<Long> outputParts, String dataType) {
+    private static void displayNaturalSortingOutputLong(DataParts<Long> outputParts, String dataType, String outputFile) throws IOException {
         List<Long> parts = outputParts.getParts();
-        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+        String result = String.format("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
 
         List<Long> longList = parts.stream()
                 .filter(obj -> obj instanceof Long)
                 .map(obj -> (Long) obj)
                 .collect(Collectors.toList());
         Collections.sort(longList);
-        System.out.print("Sorted data: ");
-        for (Long number : longList) {
-            System.out.print(number + " ");
+
+        if (outputFile != null) {
+            try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)))) {
+                out.print(result);
+                out.print("Sorted data: ");
+                for (Long number : longList) {
+                    out.print(number + " ");
+                }
+            }
+        } else {
+            System.out.print(result);
+            System.out.print("Sorted data: ");
+            for (Long number : longList) {
+                System.out.print(number + " ");
+            }
         }
     }
 
-    private static void displayNaturalSortingOutputLine(DataParts<String> outputParts, String dataType) {
+    private static void displayNaturalSortingOutputLine(DataParts<String> outputParts, String dataType, String outputFile) throws IOException {
         List<String> parts = outputParts.getParts();
-        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+        String result = String.format("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
 
         List<String> lineList = parts.stream()
                 .filter(obj -> obj instanceof String)
                 .map(obj -> (String) obj)
                 .collect(Collectors.toList());
         Collections.sort(lineList);
-        System.out.println("Sorted data:");
-        for (String line : lineList) {
-            System.out.println(line);
+
+        if (outputFile != null) {
+            try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)))) {
+                out.print(result);
+                out.print("Sorted data: ");
+                for (String line : lineList) {
+                    out.println(line);
+                }
+            }
+        } else {
+            System.out.print(result);
+            System.out.println("Sorted data:");
+            for (String line : lineList) {
+                System.out.println(line);
+            }
         }
     }
 
-    private static void displayNaturalSortingOutputWord(DataParts<String> outputParts, String dataType) {
+    private static void displayNaturalSortingOutputWord(DataParts<String> outputParts, String dataType, String outputFile) throws IOException {
         List<String> parts = outputParts.getParts();
-        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+        String result = String.format("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
 
         List<String> wordList = parts.stream()
                 .filter(obj -> obj instanceof String)
@@ -80,11 +108,27 @@ public class OutputFormatter {
         for (String word : wordList) {
             System.out.print(word + " ");
         }
+
+        if (outputFile != null) {
+            try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)))) {
+                out.print(result);
+                out.print("Sorted data: ");
+                for (String word : wordList) {
+                    out.print(word + " ");
+                }
+            }
+        } else {
+            System.out.print(result);
+            System.out.print("Sorted data: ");
+            for (String word : wordList) {
+                System.out.print(word + " ");
+            }
+        }
     }
 
-    private static void displayCountSortingOutputLong(DataParts<Long> outputParts, String dataType) {
+    private static void displayCountSortingOutputLong(DataParts<Long> outputParts, String dataType, String outputFile) throws IOException {
         List<Long> parts = outputParts.getParts();
-        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+        String result = String.format("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
 
         Map<Long, Integer> frequencyMap = new HashMap<>();
         // Count the frequency of each element
@@ -99,18 +143,34 @@ public class OutputFormatter {
         // Calculate the total number of elements
         int totalElements = parts.size();
 
-        // Display the sorted elements with count and percentage
-        for (Map.Entry<Long, Integer> entry : sortedEntries) {
-            Long element = entry.getKey();
-            int count = entry.getValue();
-            double percentage = (double) count / totalElements * 100;
-            System.out.printf("%d: %d time(s), %.0f%%\n", element, count, percentage);
+        // Output the sorted elements with count and percentage
+
+        if (outputFile != null) {
+            try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)))) {
+                out.print(result);
+                for (Map.Entry<Long, Integer> entry : sortedEntries) {
+                    Long element = entry.getKey();
+                    int count = entry.getValue();
+                    double percentage = (double) count / totalElements * 100;
+                    out.printf("%d: %d time(s), %.0f%%\n", element, count, percentage);
+                }
+            }
+        } else {
+            System.out.print(result);
+            for (Map.Entry<Long, Integer> entry : sortedEntries) {
+                Long element = entry.getKey();
+                int count = entry.getValue();
+                double percentage = (double) count / totalElements * 100;
+                System.out.printf("%d: %d time(s), %.0f%%\n", element, count, percentage);
+            }
         }
+
+
     }
 
-    private static void displayCountSortingOutputLine(DataParts<String> outputParts, String dataType) {
+    private static void displayCountSortingOutputLine(DataParts<String> outputParts, String dataType, String outputFile) throws IOException {
         List<String> parts = outputParts.getParts();
-        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+        String result = String.format("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
 
         Map<String, Integer> frequencyMap = new HashMap<>();
         // Count the frequency of each element
@@ -125,18 +185,33 @@ public class OutputFormatter {
         // Calculate the total number of elements
         int totalElements = parts.size();
 
-        // Display the sorted elements with count and percentage
-        for (Map.Entry<String, Integer> entry : sortedEntries) {
-            String element = entry.getKey();
-            int count = entry.getValue();
-            double percentage = (double) count / totalElements * 100;
-            System.out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+        // Output the sorted elements with count and percentage
+
+        if (outputFile != null) {
+            try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)))) {
+                out.print(result);
+                for (Map.Entry<String, Integer> entry : sortedEntries) {
+                    String element = entry.getKey();
+                    int count = entry.getValue();
+                    double percentage = (double) count / totalElements * 100;
+                    out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+                }
+            }
+        } else {
+            System.out.print(result);
+            for (Map.Entry<String, Integer> entry : sortedEntries) {
+                String element = entry.getKey();
+                int count = entry.getValue();
+                double percentage = (double) count / totalElements * 100;
+                System.out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+            }
         }
+
     }
 
-    private static void displayCountSortingOutputWord(DataParts<String> outputParts, String dataType) {
+    private static void displayCountSortingOutputWord(DataParts<String> outputParts, String dataType, String outputFile) throws IOException {
         List<String> parts = outputParts.getParts();
-        System.out.printf("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
+        String result = String.format("Total %s: %d.\n", getDataTypeLabel(dataType), parts.size());
 
         Map<String, Integer> frequencyMap = new HashMap<>();
         // Count the frequency of each element
@@ -151,13 +226,28 @@ public class OutputFormatter {
         // Calculate the total number of elements
         int totalElements = parts.size();
 
-        // Display the sorted elements with count and percentage
-        for (Map.Entry<String, Integer> entry : sortedEntries) {
-            String element = entry.getKey();
-            int count = entry.getValue();
-            double percentage = (double) count / totalElements * 100;
-            System.out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+        // Output the sorted elements with count and percentage
+
+        if (outputFile != null) {
+            try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)))) {
+                out.print(result);
+                for (Map.Entry<String, Integer> entry : sortedEntries) {
+                    String element = entry.getKey();
+                    int count = entry.getValue();
+                    double percentage = (double) count / totalElements * 100;
+                    out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+                }
+            }
+        } else {
+            System.out.print(result);
+            for (Map.Entry<String, Integer> entry : sortedEntries) {
+                String element = entry.getKey();
+                int count = entry.getValue();
+                double percentage = (double) count / totalElements * 100;
+                System.out.printf("%s: %d time(s), %.0f%%\n", element, count, percentage);
+            }
         }
+
     }
 
     private static class CountComparator<T extends Comparable<T>> implements Comparator<Map.Entry<T, Integer>> {

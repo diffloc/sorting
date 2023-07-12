@@ -23,7 +23,6 @@ public class InputProcessor {
     }
 
     public static void processInputLine(DataParts<String> inputParts, DataParts<String> outputParts) {
-        // No further processing - line input
         outputParts.getParts().addAll(inputParts.getParts());
     }
 
