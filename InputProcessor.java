@@ -6,6 +6,8 @@ import java.util.List;
 
 public class InputProcessor {
 
+    //TODO: Use StringTokenizer or Pattern.compile() for more efficient string splitting.
+
     public static void processInputLong(DataParts<String> inputParts, DataParts<Long> outputParts) {
         for (String line: inputParts.getParts()) {
             String[] numbers = line.split("\\s+");

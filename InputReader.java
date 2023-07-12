@@ -15,6 +15,7 @@ public class InputReader {
             }
             inputParts.getParts().add(input);
         }
+
         return inputParts;
     }
 }

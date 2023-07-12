@@ -14,6 +14,8 @@ public class OutputFormatter {
         };
     }
 
+    // TODO: Refactoir with generic displayNatural and displayCount
+
     public static void displayOutputLong(DataParts<Long> outputParts, String sortingType) {
         switch (sortingType) {
             case "natural" -> displayNaturalSortingOutputLong(outputParts, "long");
